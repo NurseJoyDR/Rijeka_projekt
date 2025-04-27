@@ -1,0 +1,34 @@
+header {
+    background-color: white;
+    display: flex; /* tekst redosljed*/
+    justify-content: space-between; /* strana*/
+    align-items: center;/*centriranje*/
+    background: linear-gradient(to bottom, white 70%, rgba(255, 255, 255, 0) 100%);
+}
+
+.logo {
+    display: flex;
+    padding: 1rem;
+    color: rgb(24, 158, 199);
+    -webkit-text-stroke: 0.5px black;
+}
+
+.nav-kavez {
+    
+    padding: 1rem 3rem 2rem; /* dolje,lijevo */
+}
+nav {
+    display: flex; /* tekst redosljed*/
+    justify-content: flex-end; /* strana*/
+    gap: 3rem; /* razmak između linkova*/
+    align-items: center;/*centriranje*/
+}
+
+nav a {
+    text-decoration: none; /* bez podcrtavanja*/
+    color: rgb(24, 158, 199); /* boja teksta*/
+    font-size: 1.7rem; /* veličina teksta*/
+    font-weight: bold; /* podebljano*/
+    -webkit-text-stroke: 0.5px black;
+}
+

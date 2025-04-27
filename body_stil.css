@@ -1,0 +1,22 @@
+html, body {
+    height: 100%; /* cijela visina ekrana */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;/* prema dolje */
+
+    background-image: url('slike/Pozadina.jpg'); /* stavi svoju sliku */
+    background-size: cover; /* ili contain */
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+main {
+    flex: 1; /* main se širi da popuni prostor */
+}
+
+footer {
+    background-color: #1a1a1a;
+    color: white;
+    text-align: center;
+}
