@@ -1,27 +1,35 @@
+html, body{
+    font-family: "Montserrat", sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
 header {
     background-color: white;
     display: flex; /* tekst redosljed*/
     justify-content: space-between; /* strana*/
     align-items: center;/*centriranje*/
-    background: linear-gradient(to bottom, white 70%, rgba(255, 255, 255, 0) 100%);
 }
 
-.logo {
+.logo a{
     display: flex;
     padding: 1rem;
-    color: rgb(24, 158, 199);
-    -webkit-text-stroke: 0.5px black;
+    text-decoration: none;
 }
 
-.nav-kavez {
-    
-    padding: 1rem 3rem 2rem; /* dolje,lijevo */
+.logo p{
+    margin-left: 1rem;
+    font-size: 2rem;
+    font-weight: bold;
+    color: rgb(24, 158, 199);
 }
+
 nav {
     display: flex; /* tekst redosljed*/
     justify-content: flex-end; /* strana*/
     gap: 3rem; /* razmak između linkova*/
     align-items: center;/*centriranje*/
+    margin: 0 3rem;
 }
 
 nav a {
@@ -29,6 +37,5 @@ nav a {
     color: rgb(24, 158, 199); /* boja teksta*/
     font-size: 1.7rem; /* veličina teksta*/
     font-weight: bold; /* podebljano*/
-    -webkit-text-stroke: 0.5px black;
 }
 

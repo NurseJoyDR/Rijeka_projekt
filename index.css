@@ -1,0 +1,45 @@
+main .naslovna_slika{
+    height: 40vh; /* cijela visina ekrana */
+    display: flex;
+    flex-direction: column;/* prema dolje */
+    background-image: url('slike/Pozadina.jpg'); /* stavi svoju sliku */
+    background-size: cover; /* ili contain */
+    background-position: center;
+    background-repeat: no-repeat;
+    margin-bottom: 5rem;
+}
+
+section{
+    width: 80%;
+    max-width: 1080px;
+    margin: auto;
+    margin-bottom: 4rem;
+    display: flex;
+    align-items: center;
+}
+
+section h1{
+    margin: auto;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+section .lijevo, section .desno{
+    width: 50%;
+    padding: 0 1rem;
+}
+
+section img{
+    width: 100%;
+}
+
+footer {
+    background-color: #1a1a1a;
+    color: white;
+    text-align: center;
+    padding: 1rem;
+}
+
+footer p{
+    margin: 0;
+}
