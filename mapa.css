@@ -1,0 +1,43 @@
+section{
+    margin-bottom: 4rem;
+    display: flex;
+    
+}
+/*Naslov*/
+section h1{
+    margin: auto;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+/* sadržaj*/
+.mapa_stranica {
+    display: flex;
+    gap: 3rem;
+    padding: 2rem;
+    max-width: 1280px;
+    margin : 0 auto;
+    
+}
+
+.mapa {
+    height: 700px;
+    width: 900px;
+    background-color:rgb(24, 158, 199); /* placeholder dok nema prave mape */
+    border-radius: 20px;
+    padding: 1rem;
+    color: white;
+}
+
+.tekst {
+    flex: 3;
+    padding: 1rem;
+
+}
+
+.buttons{
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+

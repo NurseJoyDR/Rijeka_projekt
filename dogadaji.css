@@ -1,0 +1,13 @@
+
+section{
+    margin-bottom: 4rem;
+    display: flex;
+}
+
+/*Naslov*/
+
+section h1{
+    margin: auto;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}

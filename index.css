@@ -1,0 +1,25 @@
+section{
+    width: 80%;
+    max-width: 1080px;
+    margin: auto;
+    margin-bottom: 4rem;
+    display: flex;
+    align-items: center;
+}
+/*Naslov*/
+section h1{
+    margin: auto;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+section .lijevo, section .desno{
+    width: 50%;
+    padding: 0 1rem;
+}
+
+section img{
+    width: 100%;
+}
+
+
