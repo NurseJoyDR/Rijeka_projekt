@@ -1,0 +1,65 @@
+/*Body*/
+html, body{
+    font-family: "Montserrat", sans-serif; /*font*/
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: white; /*Boja pozadine*/
+    display: flex; /*redosljed navigacije*/
+    justify-content: space-between; /* strana*/
+    align-items: center;/*centriranje*/
+}
+/*Navigacija*/
+nav {
+    display: flex; /* tekst redosljed*/
+    justify-content: flex-end; 
+    gap: 3rem; /* razmak između linkova*/
+    align-items: center;/*centriranje, neka ga*/
+    margin: 0 3rem; /*Debljina udaljenosti kraja*/
+}
+
+nav a {
+    text-decoration: none; /* bez podcrtavanja*/
+    color: rgb(24, 158, 199); /* boja teksta*/
+    font-size: 1.7rem; /* veličina teksta*/
+    font-weight: bold; /* podebljano*/
+}
+/*logo-tekst*/
+.logo a{
+    display: flex;
+    padding: 1rem;
+    text-decoration: none;
+}
+
+.logo p{
+    margin-left: 1rem;
+    font-size: 2rem;
+    font-weight: bold;
+    color: rgb(24, 158, 199);
+}
+/*Sadrzaj*/
+
+/*naslovna slika*/ /* izbaci ako cemo mjenjati velicinu ili drugu sliku*/
+main .naslovna_slika{
+    height: 40vh; /* visina slike */
+    display: flex;
+    flex-direction: column;/* prema dolje */
+    background-image: url('slike/Pozadina.jpg'); 
+    background-size: cover; /* ili contain */
+    background-position: center;
+    background-repeat: no-repeat;
+    margin-bottom: 5rem;
+}
+/*footer*/
+footer {
+    background-color: #1a1a1a;
+    color: white;
+    text-align: center;
+    padding: 1rem;
+}
+
+footer p{
+    margin: 0;
+}
