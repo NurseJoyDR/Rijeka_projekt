@@ -4,10 +4,89 @@ section{
     display: flex;
 }
 
-/*Naslov*/
+/* Naslov */
 
 section h1{
     margin: auto;
     font-size: 2.5rem;
     margin-bottom: 1rem;
+}
+
+/* News blokovi */
+
+.glavno{
+    width: 80%;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 2.5%;
+}
+
+.blok{
+    width: 20%;
+    border-radius: 10%;
+    margin: 2vh 0;
+    box-shadow: 4px 4px 5px 5px #ccc;
+}
+
+.blok img{
+    width: 100%;
+    border-radius: 10% 10% 0 0;
+}
+
+.blok_tekst{
+    padding: 0 5% 5%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+}
+
+.blok_tekst h2{
+    margin-block-start: 1em;
+    margin-block-end: 0;
+}
+
+.blok_tekst ul{
+    list-style-type: none;
+    padding: 0;
+}
+
+.blok_tekst li{
+    display: flex;
+    justify-content: center;
+    padding: 5px 0;
+}
+
+.blok_tekst li p{
+    margin: 0;
+    font-weight: 600;
+}
+
+.blok_tekst li p:first-child{
+    margin-right: 0.5rem;
+}
+
+/*
+.blok_tekst li:first-child::before{
+    content: "Početak: ";
+}
+
+.blok_tekst li:last-child::before{
+    content: "Kraj: ";
+}
+*/
+
+.blok_tekst a{
+    text-decoration: none;
+    font-weight: bold;
+    color: rgb(24, 158, 199);
+    font-size: 1.3rem;
+    transition: color 0.5s;
+}
+
+.blok_tekst a:hover{
+    color: rgb(24, 36, 199);
 }
