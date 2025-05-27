@@ -1,0 +1,26 @@
+{
+  "name": "rijeka_projekt",
+  "version": "1.0.0",
+  "description": "Ovaj projekt predstavlja informacijski sustav za Grad Rijeku koji se sastoji od API-ja i web sjedišta. Cilj sustava je pružiti korisnicima sve aktualne informacije o gradu na jednom mjestu",
+  "main": "api.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NurseJoyDR/Rijeka_projekt.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NurseJoyDR/Rijeka_projekt/issues"
+  },
+  "homepage": "https://github.com/NurseJoyDR/Rijeka_projekt#readme",
+  "dependencies": {
+    "axios": "^1.9.0",
+    "cheerio": "^1.0.0",
+    "mongodb": "^6.16.0",
+    "node-cron": "^4.0.7"
+  }
+}
