@@ -34,50 +34,65 @@
             <h1>Današnje Vijesti</h1>
         </section>
 
-        <section class="glavno">
-            <div class="blok">
-                <img src="slike/Korzo.jpg" alt="test_slika">
-                <div class="blok_tekst">
-                    <h2>Test naslov</h2>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed illum doloribus iste perspiciatis eveniet, cumque magni molestias odit, deleniti ea vel eaque recusandae magnam nisi veritatis ut odio mollitia labore!</p>
-                    <a href="index.html">Pročitaj više!</a>
-                </div>
-            </div>
-
-            <div class="blok">
-                <img src="slike/Korzo.jpg" alt="test_slika">
-                <div class="blok_tekst">
-                    <h2>Test naslov</h2>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed illum doloribus iste perspiciatis eveniet, cumque magni molestias odit, deleniti ea vel eaque recusandae magnam nisi veritatis ut odio mollitia labore!</p>
-                    <a href="index.html">Pročitaj više!</a>
-                </div>
-            </div>
-
-            <div class="blok">
-                <img src="slike/Korzo.jpg" alt="test_slika">
-                <div class="blok_tekst">
-                    <h2>Test naslov</h2>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed illum doloribus iste perspiciatis eveniet, cumque magni molestias odit, deleniti ea vel eaque recusandae magnam nisi veritatis ut odio mollitia labore!</p>
-                    <a href="index.html">Pročitaj više!</a>
-                </div>
-            </div>
-            <div class="blok">
-                <img src="slike/Korzo.jpg" alt="test_slika">
-                <div class="blok_tekst">
-                    <h2>Test naslov</h2>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed illum doloribus iste perspiciatis eveniet, cumque magni molestias odit, deleniti ea vel eaque recusandae magnam nisi veritatis ut odio mollitia labore!</p>
-                    <a href="index.html">Pročitaj više!</a>
-                </div>
-            </div>
-            <div class="blok">
-                <img src="slike/Korzo.jpg" alt="test_slika">
-                <div class="blok_tekst">
-                    <h2>Test naslov</h2>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed illum doloribus iste perspiciatis eveniet, cumque magni molestias odit, deleniti ea vel eaque recusandae magnam nisi veritatis ut odio mollitia labore!</p>
-                    <a href="index.html">Pročitaj više!</a>
-                </div>
-            </div>
+        <section class="glavno" id="content">
         </section>
+
+
+        <script>
+            let trenutnaStranica = 1;
+            const limit = 9;
+
+            async function ucitajPodatke(stranica) {
+                const res = await fetch(`http://localhost:3000/api/vjesti?page=${stranica}&limit=${limit}`);
+                const vijesti = await res.json();
+
+                const content = document.getElementById('content');
+
+                vijesti.data.forEach(vijest => {
+                    var date = new Date(vijest.postDate);
+                    var croDate = `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}.`;
+
+                    const blok = document.createElement('div');
+                    blok.className = 'blok';
+                    blok.innerHTML = `
+                        <img src="${vijest.imgsrc}" alt="">
+                        <div class="blok_tekst">
+                            <div class="tekst_sekcija">
+                                <p class="datum">${croDate}</p>
+                                <h2>${vijest.title}</h2>
+                                <p>${vijest.summary}</p>
+                            </div>
+                            <div class="link_sekcija">
+                                <a href="${vijest.link}">Pročitaj više!</a>
+                            </div>
+                        </div>
+                    `;
+                    content.appendChild(blok);
+                });
+
+                // sakrivanje gumba ako nema više postova za učitat
+                if (trenutnaStranica >= vijesti.totalPages) {
+                    document.getElementById('ucitajJos').style.display = 'none';
+                } else {
+                    document.getElementById('ucitajJos').style.display = 'block';
+                }
+            }
+
+            document.addEventListener('DOMContentLoaded', () => {
+                ucitajPodatke(trenutnaStranica);
+
+                const ucitajJos = document.createElement('button');
+                ucitajJos.textContent = 'UČITAJ JOŠ';
+                ucitajJos.id = 'ucitajJos';
+                ucitajJos.onclick = () => {
+                    trenutnaStranica++;
+                    ucitajPodatke(trenutnaStranica);
+                };
+
+                document.body.getElementsByTagName("main")[0].appendChild(ucitajJos);
+            });
+        </script>
+
 
     
     </main>
