@@ -6,6 +6,7 @@
     <title>HeatmapRijeka</title>
     <link rel="stylesheet" href="globalno.css">
     <link rel="stylesheet" href="mapa.css">
+    <link href="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css" rel="stylesheet" />
     
 </head>
 <body>
@@ -33,20 +34,106 @@
             <h1>Interaktivna mapa</h1>
         </section>
 
-        <div class="mapa_stranica">
-            <div class="mapa">
-                <h2>Buduca API mapa</h2>
-            </div>
-    
-            <div class="tekst">
-                <h2>Postavke mape</h2>
-                <p>Odaberi sloj prikaza:</p>
-                <div class="buttons">    
-                    <button>Prikaži Stanovništvo</button>
-                    <button>Prikaži Promet</button>
-                    <button>Prikaži Parkirališta</button>
+        <div id="mapa_stranica">
+            <div id="map">
+                
+                <div id="layer-toggle">
+                    <label><input type="checkbox" id="toggle-gustoce"> Prikaži gustoću</label>
                 </div>
+
+                <script src="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js"></script>
+                
+                <script>
+                    const map = new maplibregl.Map({
+                        container: 'map',
+                        style: 'https://api.maptiler.com/maps/streets-v2/style.json?key=2qZ9bAELlSascD6qfNTp',
+                        center: [14.4422, 45.3271],
+                        zoom: 15.5,
+                        pitch: 60,
+                        bearing: -20,
+                        antialias: true
+                    });     
+
+                    map.addControl(new maplibregl.NavigationControl());
+
+                    map.on('load', () => {
+                        // Nađi prvi sloj oznaka (ispod kojeg umetati slojeve)
+                        const layers = map.getStyle().layers;
+                        let labelLayerId;
+                        for (let i = 0; i < layers.length; i++) {
+                            if (layers[i].type === 'symbol' && layers[i].layout['text-field']) {
+                                labelLayerId = layers[i].id;
+                                break;
+                            }
+                        }
+
+                        // (više slojeva)
+                        const naselja = [
+                        { id: 'luka', file: 'Luka_zgrade.geojson', color: '#fee9d3' },
+                        { id: 'skoljici', file: 'Skoljici_StariGrad_zgrade.geojson', color: '#fee2c7' },
+                        { id: 'kozala', file: 'Kozala_zgrade.geojson', color: '#fa8532' },
+                        { id: 'brajda', file: 'Brajda_zgrade.geojson', color: '#fdb271' },
+                        { id: 'belvedere', file: 'Belvedere_zgrade.geojson', color: '#fdba7f' },
+                        { id: 'potok', file: 'Potok_zgrade.geojson', color: '#fee5cc' },
+                        { id: 'banderovo', file: 'Banderovo_zgrade.geojson', color: '#fdd7b1' },
+                        { id: 'mlaka', file: 'Mlaka_zgrade.geojson', color: '#fda965' },
+                        { id: 'turnici', file: 'Turnici_zgrade.geojson', color: '#fd994d' },
+                        { id: 'podmurvice', file: 'Podmurvice_zgrade.geojson', color: '#f3701b' },
+                        { id: 'svetinikola', file: 'Svetinikola_zgrade.geojson', color: '#932f03' },
+                        { id: 'kantrida', file: 'Kantrida_zgrade.geojson', color: '#ef6612' },
+                        { id: 'zamet', file: 'Zamet_zgrade.geojson', color: '#882a04' },
+                        { id: 'grbci', file: 'Grbci_zgrade.geojson', color: '#fedebf' },
+                        { id: 'gornjizamet', file: 'GornjiZamet_zgrade.geojson', color: '#f4721e' },
+                        { id: 'pehlin', file: 'Pehlin_zgrade.geojson', color: '#f26b15' },
+                        { id: 'susak', file: 'CentarSusak_zgrade.geojson', color: '#fee0c3' },
+                        { id: 'bulevard', file: 'Bulevard_zgrade.geojson', color: '#fdd9b4' },
+                        { id: 'trsat', file: 'Trsat_zgrade.geojson', color: '#fdcfa0' },
+                        ];
+
+
+                        // Dodaj slojeve, svi su početno skriveni
+                        naselja.forEach(naselje => {
+                        map.addSource(naselje.id, {
+                            type: 'geojson',
+                            data: 'geojson/' + naselje.file
+                        });
+
+                        map.addLayer({
+                            id: '3d-' + naselje.id,
+                            type: 'fill-extrusion',
+                            source: naselje.id,
+                            layout: { visibility: 'none' },
+                            paint: {
+                            'fill-extrusion-color': naselje.color,
+                            'fill-extrusion-height': ['to-number', ['get', 'height']],
+                            'fill-extrusion-base': 0,
+                            'fill-extrusion-opacity': 0.9
+                            }
+                        }, labelLayerId);
+                        });
+
+                        // Prebacivanje checkboxa
+                        document.getElementById('toggle-gustoce').addEventListener('change', function (e) {
+                        const visible = e.target.checked;
+
+                        // Sakrij sve MapTiler slojeve
+                        map.getStyle().layers.forEach(layer => {
+                            if (layer.type === 'fill-extrusion' && !layer.id.startsWith('3d-') && map.getLayer(layer.id)) {
+                            map.setLayoutProperty(layer.id, 'visibility', visible ? 'none' : 'visible');
+                            }
+                        });
+
+                        // Prikaži ili sakrij slojeve eojson naselja
+                        naselja.forEach(naselje => {
+                            map.setLayoutProperty('3d-' + naselje.id, 'visibility', visible ? 'visible' : 'none');
+                        });
+                        });
+                    });
+                </script>
+
+                
             </div>
+
         </div>
 
     
