@@ -21,7 +21,7 @@ section h1{
     width: 90%;
     height: 100%;
     margin: auto;
-    border-radius: 4%;
+    border-radius: 15px;
 }
 
 #layer-toggle {
@@ -35,3 +35,46 @@ section h1{
     z-index: 1000;
 }
 
+
+/* parking kartice */
+
+.parking_status{
+    width: 70%;
+    margin: 50px auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px 10%;
+}
+
+.parking_kartica{
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+    border-radius: 15px 15px 0 0;
+    box-shadow: 4px 4px 5px 5px #ccc;
+}
+
+.data{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.broj_mjesta{
+    text-align: center;
+    font-size: 1.5rem;
+    margin: 0;
+    margin-bottom: 5px;
+}
+
+.kapacitet{
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.boja{
+    height: 5px;
+    width: 100%;
+    border-radius: 0 0 15px 15px;
+}

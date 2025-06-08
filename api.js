@@ -453,16 +453,16 @@ app.get('/api/parking', async (req,res) => {
     const $ = cheerio.load(data);
     const parking = [];
 
-    $('.front-parking').each((i, el) => {
-      console.log(el);
+    $('.blocked').each((i, el) => {
       const parkingLink = $(el).attr('href');
-      console.log(parkingLink);
-      const parkingNaziv = $(el).find('h2').text().trim();
-      console.log(parkingNaziv);
+      let parkingNaziv = $(el).find('h2').text().trim();
       const parkingKapacitet = $(el).find('h2 span').text().trim();
-      console.log(parkingKapacitet);
-      const parkingBrojMjesta = $(el).find('div.park-free').text().trim();
-      console.log(parkingBrojMjesta);
+      let parkingBrojMjesta = $(el).find('div.park-free').text().trim();
+      const status = $(el).find('div.park-free span').text().trim();
+
+      parkingNaziv = parkingNaziv.replace(parkingKapacitet, "");
+      parkingBrojMjesta = parkingBrojMjesta.replace(status, "");
+
       parking.push({ link: parkingLink, naziv: parkingNaziv, kapacitet: parkingKapacitet, brojMjesta : parkingBrojMjesta });
     });
 
