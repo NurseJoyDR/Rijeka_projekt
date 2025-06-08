@@ -86,7 +86,7 @@ async function scrapeNewsPage(pageNumber) {
       const $$ = cheerio.load(postPage);
 
       // Replace with the correct selector for the date
-      const postDate = $$('.post-date').attr('datetime'); // adjust this!
+      const postDate = $$('.post-date').attr('datetime');
       article.postDate = postDate;
 
       if (!(await articleExists(article.link))) {
@@ -443,6 +443,35 @@ app.get('/api/dogadaji', async (req, res) => {
     res.status(500).json({ error: 'Greška u serveru' });
   }
 });
+
+
+app.get('/api/parking', async (req,res) => {
+  try {
+    const parkingUrl = 'https://www.rijeka-plus.hr/parkiranje/popunjenost-parkiralista/';
+
+    const { data } = await axios.get(parkingUrl);
+    const $ = cheerio.load(data);
+    const parking = [];
+
+    $('.front-parking').each((i, el) => {
+      console.log(el);
+      const parkingLink = $(el).attr('href');
+      console.log(parkingLink);
+      const parkingNaziv = $(el).find('h2').text().trim();
+      console.log(parkingNaziv);
+      const parkingKapacitet = $(el).find('h2 span').text().trim();
+      console.log(parkingKapacitet);
+      const parkingBrojMjesta = $(el).find('div.park-free').text().trim();
+      console.log(parkingBrojMjesta);
+      parking.push({ link: parkingLink, naziv: parkingNaziv, kapacitet: parkingKapacitet, brojMjesta : parkingBrojMjesta });
+    });
+
+    res.json(parking);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Greška u serveru' });
+  }
+})
 
 
 
