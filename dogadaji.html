@@ -6,6 +6,11 @@
     <title>HeatmapRijeka</title>
     <link rel="stylesheet" href="globalno.css">
     <link rel="stylesheet" href="dogadaji.css">
+
+    <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+    <script src="https://unpkg.com/imagesloaded@5/imagesloaded.pkgd.min.js"></script>
+
+    
     
 </head>
 <body>
@@ -35,85 +40,104 @@
         </section>
 
         <section class="glavno">
-            <div class="blok">
-                <img src="slike/Korzo.jpg" alt="test_slika">
-                <div class="blok_tekst">
-                    <h2>Test naslov</h2>
-                    <ul>
-                        <li><p>Početak:</p><p class="dogadaj_pocetak">10.05., 16:00</p></li>
-                        <li><p>Kraj:</p><p class="dogadaj_kraj">13.05., 20:00</p></li>
-                    </ul>
-                    <a href="index.html">Pročitaj više!</a>
-                </div>
-            </div>
+            <div id="content">
 
-            <div class="blok">
-                <img src="slike/Korzo.jpg" alt="test_slika">
-                <div class="blok_tekst">
-                    <h2>Test naslov</h2>
-                    <ul>
-                        <li><p>Početak:</p><p class="dogadaj_pocetak">10.05., 16:00</p></li>
-                        <li><p>Kraj:</p><p class="dogadaj_kraj">13.05., 20:00</p></li>
-                    </ul>
-                    <a href="index.html">Pročitaj više!</a>
-                </div>
-            </div>
-
-            <div class="blok">
-                <img src="slike/Korzo.jpg" alt="test_slika">
-                <div class="blok_tekst">
-                    <h2>Test naslov</h2>
-                    <ul>
-                        <li><p>Početak:</p><p class="dogadaj_pocetak">10.05., 16:00</p></li>
-                        <li><p>Kraj:</p><p class="dogadaj_kraj">13.05., 20:00</p></li>
-                    </ul>
-                    <a href="index.html">Pročitaj više!</a>
-                </div>
-            </div>
-
-            <div class="blok">
-                <img src="slike/Korzo.jpg" alt="test_slika">
-                <div class="blok_tekst">
-                    <h2>Test naslov</h2>
-                    <ul>
-                        <li><p>Početak:</p><p class="dogadaj_pocetak">10.05., 16:00</p></li>
-                        <li><p>Kraj:</p><p class="dogadaj_kraj">13.05., 20:00</p></li>
-                    </ul>
-                    <a href="index.html">Pročitaj više!</a>
-                </div>
-            </div>
-
-            <div class="blok">
-                <img src="slike/Korzo.jpg" alt="test_slika">
-                <div class="blok_tekst">
-                    <h2>Test naslov</h2>
-                    <ul>
-                        <li><p>Početak:</p><p class="dogadaj_pocetak">10.05., 16:00</p></li>
-                        <li><p>Kraj:</p><p class="dogadaj_kraj">13.05., 20:00</p></li>
-                    </ul>
-                    <a href="index.html">Pročitaj više!</a>
-                </div>
-            </div>
-
-            <div class="blok">
-                <img src="slike/Korzo.jpg" alt="test_slika">
-                <div class="blok_tekst">
-                    <h2>Test naslov</h2>
-                    <ul>
-                        <li><p>Početak:</p><p class="dogadaj_pocetak">10.05., 16:00</p></li>
-                        <li><p>Kraj:</p><p class="dogadaj_kraj">13.05., 20:00</p></li>
-                    </ul>
-                    <a href="index.html">Pročitaj više!</a>
-                </div>
             </div>
         </section>
 
     
+        <script>
+            let trenutnaStranica = 1;
+            const limit = 9;
+            let msnry;
+
+            async function ucitajPodatke(stranica) {
+                const res = await fetch(`http://localhost:3000/api/dogadaji?page=${stranica}&limit=${limit}`);
+                const dogadaji = await res.json();
+
+                const content = document.getElementById('content');
+
+                dogadaji.data.forEach(event => {
+                    var slika = event.eventImg;
+                    var title = event.eventTitle;
+                    var vrijeme = event.fullDate;
+                    var opis = event.eventTekst;
+                    var link = event.link;
+
+                    if (event.eventLokacija != "NaN") {
+                        var lokacija = event.eventLokacija.lokacijaNaziv;
+                    }
+                    else {
+                        var lokacija = ""
+                    }
+
+                    const blok = document.createElement('div');
+                    blok.className = 'blok';
+                    blok.innerHTML = `
+                    <div class="blok_content">
+                        <img src="${slika}" alt="">
+                        <div class="blok_tekst">
+                            <div class="tekst_sekcija">
+                                <h2>${title}</h2>
+                                <p class="datum">${vrijeme}</p>
+                                <p class="lokacija">${lokacija}</p>
+                                <p class="opis">${opis}</p>
+                            </div>
+                            <div class="link_sekcija">
+                                <a href="${link}">Pročitaj više!</a>
+                            </div>
+                        </div>
+                    </div>
+                    `;
+
+                    content.appendChild(blok);
+
+                    imagesLoaded(content, function () {
+                        msnry.reloadItems();
+                        msnry.layout();
+                    });
+                });
+
+                // sakrivanje gumba ako nema više postova za učitat
+                if (trenutnaStranica >= dogadaji.totalPages) {
+                    document.getElementById('ucitajJos').style.display = 'none';
+                } else {
+                    document.getElementById('ucitajJos').style.display = 'block';
+                }
+            }
+
+            document.addEventListener('DOMContentLoaded', () => {
+                const grid = document.querySelector('#content');
+
+                msnry = new Masonry(grid, {
+                    itemSelector: '.blok',
+                    columnWidth: '.blok',  // Optional, helps with spacing
+                    gutter: 40,            // Gap between items
+                    percentPosition: true  // For responsive layout
+                });
+
+
+                ucitajPodatke(trenutnaStranica);
+
+                const ucitajJos = document.createElement('button');
+                ucitajJos.textContent = 'UČITAJ JOŠ';
+                ucitajJos.id = 'ucitajJos';
+                ucitajJos.onclick = () => {
+                    trenutnaStranica++;
+                    ucitajPodatke(trenutnaStranica);
+                };
+
+                document.body.getElementsByTagName("main")[0].appendChild(ucitajJos);
+            });
+            
+        </script>
     </main>
 
     <footer>
         <p>© 2025 · Izradio: Filip & Matija · Podaci:</p>
     </footer>
+    <script>
     
+    </script>
 </body>
 </html>

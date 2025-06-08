@@ -221,7 +221,7 @@ function formatiranjeDatumaPocetka(dateStr) {
 
   const [hour, minute] = timeMatch ? timeMatch.slice(1).map(Number) : [0, 0];
 
-  return new Date(year, month - 1, day, hour + 2, minute);
+  return new Date(year, month - 1, day, hour, minute);
 }
 
 
@@ -245,35 +245,49 @@ function formatiranjeDatumaZavrsetka(dateStr) {
 
   const [hour, minute] = timeMatch ? timeMatch.slice(1).map(Number) : [23, 59];
 
-  return new Date(year, month - 1, day, hour + 2, minute);
+  return new Date(year, month - 1, day, hour, minute);
 }
 
 
 async function scrapeEventPage(url) {
-  const res = await axios.get(url);
+  try {
+    const res = await axios.get(url);
 
-  const $ = cheerio.load(res.data);
+    const $ = cheerio.load(res.data);
 
-  const test = cheerio.load(res.status);
+    const eventTitle = $('.fusion-title-2').text().trim();
+    const eventTekst = $('meta[name="description"]').attr('content');
+    const eventImg = $('meta[property="og:image"]').attr('content');
 
-  console.log("Ovo je status: "+test);
-  if (test == 404) {
-    return null
-  }
+    const fullDate = $('.fusion-text-1').text().trim();
 
-  const eventTitle = $('.fusion-title-2').text().trim();
-  const eventTekst = $('meta[name="description"]').attr('content');
-  const eventImg = $('meta[property="og:image"]').attr('content');
+    const hrefCheck = $('.fusion-text-2').find('a').attr('href');
 
-  const fullDate = $('.fusion-text-1').text().trim();
+    const sortDate = formatiranjeDatumaPocetka(fullDate);
 
-  const hrefCheck = $('.fusion-text-2').find('a').attr('href');
+    const endDate = formatiranjeDatumaZavrsetka(fullDate);
 
-  const sortDate = formatiranjeDatumaPocetka(fullDate);
+    if (!hrefCheck) {
+      return {
+        eventTitle,
+        eventTekst,
+        link: url,
+        eventImg,
+        fullDate,
+        sortDate,
+        endDate,
+        eventLokacija:"NaN"
+      };
+    }
 
-  const endDate = formatiranjeDatumaZavrsetka(fullDate);
+    const lokacijaURL = new URL(hrefCheck);
 
-  if (!hrefCheck) {
+    const lokacijaNaziv = $('.fusion-text-2').find('a').text().trim();
+
+    const adresa = await povlacenjeAdrese(lokacijaURL.href);
+
+    const koordinate = await geocodeAdrese(adresa);
+
     return {
       eventTitle,
       eventTekst,
@@ -282,33 +296,23 @@ async function scrapeEventPage(url) {
       fullDate,
       sortDate,
       endDate,
-      eventLokacija:"NaN"
+      eventLokacija: {
+        lokacijaNaziv,
+        lokacijaURL: lokacijaURL.href,
+        lng: koordinate?.lng ?? null,
+        lat: koordinate?.lat ?? null
+      }
     };
-  }
-
-  const lokacijaURL = new URL(hrefCheck);
-
-  const lokacijaNaziv = $('.fusion-text-2').find('a').text().trim();
-
-  const adresa = await povlacenjeAdrese(lokacijaURL.href);
-
-  const koordinate = await geocodeAdrese(adresa);
-
-  return {
-    eventTitle,
-    eventTekst,
-    link: url,
-    eventImg,
-    fullDate,
-    sortDate,
-    endDate,
-    eventLokacija: {
-      lokacijaNaziv,
-      lokacijaURL: lokacijaURL.href,
-      lng: koordinate?.lng ?? null,
-      lat: koordinate?.lat ?? null
+  } catch (err) {
+    if (err.response && err.response.status === 404) {
+      console.warn("404 Not Found:", url);
+      return null;
+    } else {
+      console.error("Request failed for:", url, "\nError:", err.message);
+      return null;
     }
-  };
+  }
+  
 
 }
 
@@ -328,10 +332,12 @@ async function eventScraper() {
       if (!exists) {
         const data = await scrapeEventPage(url);
 
-        if (data === Null) {
+        if (data === null) {
           console.log("Link skipped!");
           continue;
         }
+
+
         await db.collection('dogadaji').insertOne(data);
         console.log(`Saved: ${data.eventTitle}`);
 
@@ -355,7 +361,7 @@ async function dodavanjeDatumaUBazu() {
     const sortDate = formatiranjeDatumaPocetka(dogadaji[i].fullDate);
     const endDate = formatiranjeDatumaZavrsetka(dogadaji[i].fullDate);
 
-    console.log(`Dodan datum pocetka: ${sortDate}\n`);
+    console.log(`Dodan datum pocetka: ${sortDate}`);
     console.log(`Dodan datum zavrsetka: ${endDate}\n`);
     
 
@@ -412,14 +418,17 @@ app.get('/api/dogadaji', async (req, res) => {
 
     const collection = db.collection('dogadaji');
 
+    const currendDate = new Date().toISOString();
+
     const data = await collection
-      .find({})
-      .sort({sortDate:-1})
+      .find({endDate: {$gte: new Date(currendDate)}})
+      .sort({sortDate:1})
       .skip(offset)
       .limit(limit)
       .toArray();
+
     
-    const totalRows = await collection.countDocuments();
+    const totalRows = await collection.countDocuments({endDate: {$gte: new Date(currendDate)}});
     const totalPages = Math.ceil(totalRows / limit);
 
     res.json({
@@ -436,26 +445,6 @@ app.get('/api/dogadaji', async (req, res) => {
 });
 
 
-async function testFunc(url) {
-  const res = await axios.get(url);
-  console.log(res);
-
-  const $ = cheerio.load(res.data);
-  console.log("data: "+$);
-  const eventTitle = $('.fusion-title-2').text().trim();
-  console.log("title: "+eventTitle)
-
-  const test = cheerio.load(res);
-
-  console.log("Ovo je status: "+test.data);
-  if (test == 404) {
-    return null
-  }
-
-
-}
-
-
 
 //
 async function start() {
@@ -464,10 +453,7 @@ async function start() {
 
   //dodavanjeDatumaUBazu();
 
-  //await testFunc("https://visitrijeka.hr/event/operacija-kamp-9/");
-  await testFunc("https://visitrijeka.hr/event/26-fiumanka-program-11-6/");
 
-  //await eventScraper();
   // --- Scheduler ---
   cron.schedule('0 * * * *', async () => {
     console.log('🕒 Running scheduled scrape...');
