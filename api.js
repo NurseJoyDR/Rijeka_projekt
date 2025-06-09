@@ -33,7 +33,7 @@ async function connectToDatabase() {
   }
 
   db = client.db("API");
-  console.log("✅ Connected to MongoDB");
+  console.log("Uspješno spojeno na bazu!");
 }
 
 
@@ -59,11 +59,11 @@ async function articleExists(postLink) {
 async function saveArticle(article) {
   const result = await db.collection('vjesti').insertOne(article)
 
-  console.log('✅ Saved:', article.title);
+  console.log('Spremljeno:', article.title);
 }
 
 
-
+// scraping vijesti
 async function scrapeNewsPage(pageNumber) {
   try {
     const BASE_URL_NEWS = 'https://www.fiuman.hr/tag/rijeka/page/';
@@ -81,11 +81,11 @@ async function scrapeNewsPage(pageNumber) {
     });
 
     for (const article of articles) {
-      // Fetch individual post page
+      // prikupljanje pojedinih stranica
       const { data: postPage } = await axios.get(article.link);
       const $$ = cheerio.load(postPage);
 
-      // Replace with the correct selector for the date
+      // prikupljanje datuma objavljivanja
       const postDate = $$('.post-date').attr('datetime');
       article.postDate = postDate;
 
@@ -103,7 +103,7 @@ async function scrapeNewsPage(pageNumber) {
 
 // EVENT SCRAPING
 
-
+// prikupljanje svih sitemap-ova
 async function getEventXMLsFromSitemap() {
   
   const sitemapUrl = 'https://visitrijeka.hr/sitemap_index.xml';
@@ -123,6 +123,8 @@ async function getEventXMLsFromSitemap() {
   return linkovi;
 }
 
+
+// filtriranje i sortiranje sitemap-ova
 function sortEventUrls(sitemaps) {
   // Filtrira url-ove sa "tribe_events-sitemap" u sebi
   const eventSitemaps = sitemaps.filter(url =>
@@ -156,6 +158,7 @@ function sortEventUrls(sitemaps) {
 }
 
 
+// prikupljanje url-ova iz sitemap-e
 async function getUrlsFromSitemap(sitemapUrl) {
   const res = await axios.get(sitemapUrl);
   const parsed = await xml2js.parseStringPromise(res.data);
@@ -163,6 +166,7 @@ async function getUrlsFromSitemap(sitemapUrl) {
 }
 
 
+// prikupoljanje koordinata adrese
 async function geocodeAdrese(address) {
   const apiKey = 'AIzaSyAOE3XcToyDYmQIZdNyP66YAb5J5BGNafw';
   const encodedAddress = encodeURIComponent(address);
@@ -187,6 +191,7 @@ async function geocodeAdrese(address) {
 }
 
 
+// povlacenje adrese lokacije eventa
 async function povlacenjeAdrese(urlLokacije) {
   const {data} = await axios.get(urlLokacije);
 
@@ -201,6 +206,7 @@ async function povlacenjeAdrese(urlLokacije) {
 }
 
 
+// formatiranje datuma pčetka eventa
 function formatiranjeDatumaPocetka(dateStr) {
 
   const dateMatch = dateStr.match(/(\d{1,2})\.\s*(\d{1,2})\.?/);
@@ -225,6 +231,7 @@ function formatiranjeDatumaPocetka(dateStr) {
 }
 
 
+// formatiranje datuma pčetka
 function formatiranjeDatumaZavrsetka(dateStr) {
 
   const dateMatch = dateStr.match(/(\d{1,2})\.\s*(\d{1,2})\.?\s*(?:\d{2,4}\.?\s*)?(?:\|\s*\d{1,2}\:\d{2}\s*)?(?:\-\s*\d{1,2}\:\d{2}\s*)?$/);
@@ -249,6 +256,7 @@ function formatiranjeDatumaZavrsetka(dateStr) {
 }
 
 
+// 
 async function scrapeEventPage(url) {
   try {
     const res = await axios.get(url);
@@ -485,7 +493,7 @@ async function start() {
 
   // --- Scheduler ---
   cron.schedule('0 * * * *', async () => {
-    console.log('🕒 Running scheduled scrape...');
+    console.log('Pokretanje scrapinga..');
     for (let i = 1; i <= 5; i++) {
     await scrapeNewsPage(i);
     }
