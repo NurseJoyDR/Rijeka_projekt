@@ -48,11 +48,28 @@ section h1{
 }
 
 .parking_kartica{
+    background-color: transparent;
     display: flex;
     flex-direction: column;
     width: 40%;
-    border-radius: 15px 15px 0 0;
+    border-radius: 15px 15px 10px 10px;
     box-shadow: 4px 4px 5px 5px #ccc;
+}
+
+.slobodno h2, .slobodno p{
+    color: #38b000;
+}
+
+.upitno h2, .upitno p{
+    color: #ff9100;
+}
+
+.zauzeto h2, .zauzeto p{
+    color: #bf0603;
+}
+
+.parking_kartica a{
+    text-decoration: none;
 }
 
 .data{
@@ -69,12 +86,45 @@ section h1{
 }
 
 .kapacitet{
+    color: rgb(97, 97, 97) !important;
     margin: 0;
     font-size: 0.9rem;
 }
 
 .boja{
-    height: 5px;
+    height: 7px;
     width: 100%;
     border-radius: 0 0 15px 15px;
+}
+
+.kartica1 .boja{
+    background-color: #ffadad;
+}
+
+.kartica2 .boja{
+    background-color: #ffd6a5;
+}
+
+.kartica3 .boja{
+    background-color: #fdffb6;
+}
+
+.kartica4 .boja{
+    background-color: #caffbf;
+}
+
+.kartica5 .boja{
+    background-color: #9bf6ff;
+}
+
+.kartica6 .boja{
+    background-color: #a0c4ff;
+}
+
+.kartica7 .boja{
+    background-color: #bdb2ff;
+}
+
+.kartica8 .boja{
+    background-color: #ffc6ff;
 }

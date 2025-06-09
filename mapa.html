@@ -137,56 +137,68 @@
         </div>
 
 
-        <div class="parking_status">
-            <div class="parking_kartica kartica1">
-                <div class="data">
-                    <h2 class="naziv_parkinga">
-                        Delta
-                    </h2>
-                    <div class="test">
-                        <p class="broj_mjesta">
-                            50
-                        </p>
-                        <p class="kapacitet">
-                            Kapacitet 60
-                        </p>
-                    </div>
-                </div>
-                <div class="boja">
-                </div>
-            </div>
-
-            <div class="parking_kartica kartica2">
-                <div class="data">
-                    <h2 class="naziv_parkinga">
-                    </h2>
-                    <div>
-                        <p class="broj_mjesta">
-                        </p>
-                        <p class="kapacitet">
-                        </p>
-                    </div>
-                </div>
-                <div class="boja">
-                </div>
-            </div>
-
-            <div class="parking_kartica kartica3">
-                <div class="data">
-                    <h2 class="naziv_parkinga">
-                    </h2>
-                    <div>
-                        <p class="broj_mjesta">
-                        </p>
-                        <p class="kapacitet">
-                        </p>
-                    </div>
-                </div>
-                <div class="boja">
-                </div>
-            </div>
+        <div class="parking_status" id="parking_content">
         </div>
 
+        <script>
+            async function ucitajPodatke(stranica) {
+                const res = await fetch(`http://localhost:3000/api/parking`);
+                const parkinzi = await res.json();
+
+                const content = document.getElementById('parking_content');
+
+                let i=1;
+
+                parkinzi.forEach(parking => {
+                    const kartica = document.createElement('div');
+
+                    kartica.className = `parking_kartica kartica${i}`;
+
+                    if (parking.brojMjesta > 0) {
+                        kartica.className += ' slobodno';
+                    } 
+                    else if (parking.brojMjesta == "?") {
+                        kartica.className += ' upitno';
+                    }
+                    else {
+                        kartica.className += ' zauzeto';
+                    }
+
+                    kartica.innerHTML = `
+                        <a href="${parking.link}">
+                            <div class="data">
+                                <h2 class="naziv_parkinga">
+                                    ${parking.naziv}
+                                </h2>
+
+                                <div>
+                                    <p class="broj_mjesta">
+                                        ${parking.brojMjesta}
+                                    </p>
+
+                                    <p class="kapacitet">
+                                        ${parking.kapacitet}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="boja">
+                            </div>
+                        </a>
+                    `
+
+                    i++;
+
+                    content.appendChild(kartica);
+                });
+
+                
+            }
+
+            document.addEventListener('DOMContentLoaded', () => {
+                ucitajPodatke();
+            });
+        </script>
     
     </main>
 
