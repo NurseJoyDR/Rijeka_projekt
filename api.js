@@ -124,6 +124,14 @@ async function getEventXMLsFromSitemap() {
 }
 
 
+// prikupljanje url-ova iz sitemap-e
+async function getUrlsFromSitemap(sitemapUrl) {
+  const res = await axios.get(sitemapUrl);
+  const parsed = await xml2js.parseStringPromise(res.data);
+  return parsed.urlset.url.map(entry => entry.loc[0]);
+}
+
+
 // filtriranje i sortiranje sitemap-ova
 function sortEventUrls(sitemaps) {
   // Filtrira url-ove sa "tribe_events-sitemap" u sebi
@@ -155,14 +163,6 @@ function sortEventUrls(sitemaps) {
 
   // vraca sortiranu listu sa najvecim brojem na vrhu
   return sorted;
-}
-
-
-// prikupljanje url-ova iz sitemap-e
-async function getUrlsFromSitemap(sitemapUrl) {
-  const res = await axios.get(sitemapUrl);
-  const parsed = await xml2js.parseStringPromise(res.data);
-  return parsed.urlset.url.map(entry => entry.loc[0]);
 }
 
 
@@ -256,7 +256,7 @@ function formatiranjeDatumaZavrsetka(dateStr) {
 }
 
 
-// 
+// scraping stranica događanja
 async function scrapeEventPage(url) {
   try {
     const res = await axios.get(url);
@@ -455,22 +455,35 @@ app.get('/api/dogadaji', async (req, res) => {
 
 app.get('/api/parking', async (req,res) => {
   try {
+    // link do stranice sa parkinzima
     const parkingUrl = 'https://www.rijeka-plus.hr/parkiranje/popunjenost-parkiralista/';
 
     const { data } = await axios.get(parkingUrl);
     const $ = cheerio.load(data);
     const parking = [];
 
+    // uzima svaki element sa parkingom na stranici
     $('.blocked').each((i, el) => {
+      // uzima link do parkinga
       const parkingLink = $(el).attr('href');
+
+      //uzima naziv parkinga
       let parkingNaziv = $(el).find('h2').text().trim();
+      // uzima tekst sa kapacitetom
       const parkingKapacitet = $(el).find('h2 span').text().trim();
+
+      // uzima broj mjesta
       let parkingBrojMjesta = $(el).find('div.park-free').text().trim();
+      // uzima status
       const status = $(el).find('div.park-free span').text().trim();
 
+
+      // naziv i broj mjesta takoder imaju u sebi i kapacitet i status
+      // du se miču ti dijelovi teksta da ostane samo naziv i samo broj mjesta
       parkingNaziv = parkingNaziv.replace(parkingKapacitet, "");
       parkingBrojMjesta = parkingBrojMjesta.replace(status, "");
 
+      //ubacuju se u listu sa svim ostalim parkinzima
       parking.push({ link: parkingLink, naziv: parkingNaziv, kapacitet: parkingKapacitet, brojMjesta : parkingBrojMjesta });
     });
 

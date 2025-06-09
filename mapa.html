@@ -158,19 +158,28 @@
         </div>
 
         <script>
-            async function ucitajPodatke(stranica) {
+            async function ucitajPodatke() {
+                // uzima podatke od api-a
                 const res = await fetch(`http://localhost:3000/api/parking`);
                 const parkinzi = await res.json();
 
+                // uzima element u koji ce se ubacit kartice parkinga
                 const content = document.getElementById('parking_content');
 
                 let i=1;
 
+                // razdvaja json u zasebne parkinge
                 parkinzi.forEach(parking => {
+                    // stvara karticu
                     const kartica = document.createElement('div');
 
+                    // dodaje klasu kartici i kartica${i} služi za određivanje boje ispod kartice
                     kartica.className = `parking_kartica kartica${i}`;
 
+                    // određuje boju teksta
+                    // slobodno = zeleno
+                    // upitno = žuto/narančasto
+                    // zauzeto = crveno
                     if (parking.brojMjesta > 0) {
                         kartica.className += ' slobodno';
                     } 
@@ -181,6 +190,7 @@
                         kartica.className += ' zauzeto';
                     }
 
+                    // stvara karticu sa podacima
                     kartica.innerHTML = `
                         <a href="${parking.link}">
                             <div class="data">
@@ -206,12 +216,14 @@
 
                     i++;
 
+                    // dodaje karticu u html
                     content.appendChild(kartica);
                 });
 
                 
             }
 
+            // pokreće funkciju kad se stranica učita
             document.addEventListener('DOMContentLoaded', () => {
                 ucitajPodatke();
             });
