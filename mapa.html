@@ -68,49 +68,66 @@
                         }
 
                         // (više slojeva)
-                        const naselja = [
-                        { id: 'luka', file: 'Luka_zgrade.geojson', color: '#fee9d3' },
-                        { id: 'skoljici', file: 'Skoljici_StariGrad_zgrade.geojson', color: '#fee2c7' },
-                        { id: 'kozala', file: 'Kozala_zgrade.geojson', color: '#fa8532' },
-                        { id: 'brajda', file: 'Brajda_zgrade.geojson', color: '#fdb271' },
-                        { id: 'belvedere', file: 'Belvedere_zgrade.geojson', color: '#fdba7f' },
-                        { id: 'potok', file: 'Potok_zgrade.geojson', color: '#fee5cc' },
-                        { id: 'banderovo', file: 'Banderovo_zgrade.geojson', color: '#fdd7b1' },
-                        { id: 'mlaka', file: 'Mlaka_zgrade.geojson', color: '#fda965' },
-                        { id: 'turnici', file: 'Turnici_zgrade.geojson', color: '#fd994d' },
-                        { id: 'podmurvice', file: 'Podmurvice_zgrade.geojson', color: '#f3701b' },
-                        { id: 'svetinikola', file: 'Svetinikola_zgrade.geojson', color: '#932f03' },
-                        { id: 'kantrida', file: 'Kantrida_zgrade.geojson', color: '#ef6612' },
-                        { id: 'zamet', file: 'Zamet_zgrade.geojson', color: '#882a04' },
-                        { id: 'grbci', file: 'Grbci_zgrade.geojson', color: '#fedebf' },
-                        { id: 'gornjizamet', file: 'GornjiZamet_zgrade.geojson', color: '#f4721e' },
-                        { id: 'pehlin', file: 'Pehlin_zgrade.geojson', color: '#f26b15' },
-                        { id: 'susak', file: 'CentarSusak_zgrade.geojson', color: '#fee0c3' },
-                        { id: 'bulevard', file: 'Bulevard_zgrade.geojson', color: '#fdd9b4' },
-                        { id: 'trsat', file: 'Trsat_zgrade.geojson', color: '#fdcfa0' },
+                       const naselja = [
+                            { id: 'svetikuzam', file: 'Svetikuzam_zgrade.geojson', color: '#ffffcc' }, // 188 stanovnika
+                            { id: 'pasac', file: 'Pasac_zgrade.geojson', color: '#ffffcc' }, // 342 stanovnika
+                            { id: 'orehovica', file: 'Orehovica_zgrade.geojson', color: '#ffffcc' }, // 491 stanovnika
+                            { id: 'svilno', file: 'Svilno_zgrade.geojson', color: '#ffffcc' }, // 851 stanovnika
+                            { id: 'luka', file: 'Luka_zgrade.geojson', color: '#ffffcc' }, // 929 stanovnika
+                            { id: 'potok', file: 'Potok_zgrade.geojson', color: '#ffeda0' }, // 1143 stanovnika
+                            { id: 'skoljici', file: 'Skoljici_Starigrad_zgrade.geojson', color: '#ffeda0' }, // 1248 stanovnika
+                            { id: 'draga', file: 'Draga_zgrade.geojson', color: '#ffeda0' }, // 1251 stanovnika
+                            { id: 'centar-sušak', file: 'CentarSusak_zgrade.geojson', color: '#ffeda0' }, // 1351 stanovnika
+                            { id: 'grbci', file: 'Grbci_zgrade.geojson', color: '#ffeda0' }, // 1437 stanovnika
+                            { id: 'bulevard', file: 'Bulevard_zgrade.geojson', color: '#ffeda0' }, // 1685 stanovnika
+                            { id: 'banderovo', file: 'Banderovo_zgrade.geojson', color: '#ffeda0' }, // 1745 stanovnika
+                            { id: 'pecine', file: 'Pecine_zgrade.geojson', color: '#feb24c' }, // 2027 stanovnika
+                            { id: 'gradtrsat', file: 'Trsat_zgrade.geojson', color: '#feb24c' }, // 2129 stanovnika
+                            { id: 'brašćine-pulac', file: 'Brascine_zgrade.geojson', color: '#feb24c' }, // 2147 stanovnika
+                            { id: 'vojak', file: 'Vojak_zgrade.geojson', color: '#feb24c' }, // 2436 stanovnika
+                            { id: 'krimeja', file: 'Krimeja_zgrade.geojson', color: '#feb24c' }, // 2591 stanovnika
+                            { id: 'belveder', file: 'Belvedere_zgrade.geojson', color: '#feb24c' }, // 2715 stanovnika
+                            { id: 'brajda-dolac', file: 'Brajda_zgrade.geojson', color: '#feb24c' }, // 2955 stanovnika
+                            { id: 'mlaka', file: 'Mlaka_zgrade.geojson', color: '#feb24c' }, // 3203 stanovnika
+                            { id: 'skurinjskadraga', file: 'Skurinjska_zgrade.geojson', color: '#fd8d3c' }, // 3590 stanovnika
+                            { id: 'turnici', file: 'Turnici_zgrade.geojson', color: '#fd8d3c' }, // 3705 stanovnika
+                            { id: 'kozala', file: 'Kozala_zgrade.geojson', color: '#fd8d3c' }, // 4287 stanovnika
+                            { id: 'gornjizamet', file: 'Gornjizamet_zgrade.geojson', color: '#fd8d3c' }, // 4762 stanovnika
+                            { id: 'skurinje', file: 'skurinje_zgrade.geojson', color: '#fd8d3c' }, // 4811 stanovnika
+                            { id: 'podmurvice', file: 'Podmurvice_zgrade.geojson', color: '#fd8d3c' }, // 4825 stanovnika
+                            { id: 'pehlin', file: 'Pehlin_zgrade.geojson', color: '#fd8d3c' }, // 4978 stanovnika
+                            { id: 'podvezica', file: 'Podvezica_zgrade.geojson', color: '#fd8d3c' }, // 4981 stanovnika
+                            { id: 'kantrida', file: 'Kantrida_zgrade.geojson', color: '#f03b20' }, // 5114 stanovnika
+                            { id: 'gornjavežica', file: 'Gornjavezica_zgrade.geojson', color: '#f03b20' }, // 5371 stanovnika
+                            { id: 'srdoci', file: 'Srdoci_zgrade.geojson', color: '#f03b20' }, // 6346 stanovnika
+                            { id: 'drenova', file: 'Drenova_zgrade.geojson', color: '#bd0026' }, // 7063 stanovnika
+                            { id: 'svetinikola', file: 'Svetinikola_zgrade.geojson', color: '#bd0026' }, // 7502 stanovnika
+                            { id: 'zamet', file: 'Zamet_zgrade.geojson', color: '#bd0026' }, // 7765 stanovnika
+                            
                         ];
-
 
                         // Dodaj slojeve, svi su početno skriveni
                         naselja.forEach(naselje => {
-                        map.addSource(naselje.id, {
-                            type: 'geojson',
-                            data: 'geojson/' + naselje.file
+                            map.addSource(naselje.id, {
+                                type: 'geojson',
+                                data: 'geojson/' + naselje.file
+                            });
+
+                            map.addLayer({
+                                id: '3d-' + naselje.id,
+                                type: 'fill-extrusion',
+                                source: naselje.id,
+                                layout: { visibility: 'none' },
+                                paint: {
+                                'fill-extrusion-color': naselje.color,
+                                'fill-extrusion-height': ['to-number', ['get', 'height']],
+                                'fill-extrusion-base': 0,
+                                'fill-extrusion-opacity': 0.9
+                                }
+                            }, labelLayerId);
                         });
 
-                        map.addLayer({
-                            id: '3d-' + naselje.id,
-                            type: 'fill-extrusion',
-                            source: naselje.id,
-                            layout: { visibility: 'none' },
-                            paint: {
-                            'fill-extrusion-color': naselje.color,
-                            'fill-extrusion-height': ['to-number', ['get', 'height']],
-                            'fill-extrusion-base': 0,
-                            'fill-extrusion-opacity': 0.9
-                            }
-                        }, labelLayerId);
-                        });
+                        
 
                         // Prebacivanje checkboxa
                         document.getElementById('toggle-gustoce').addEventListener('change', function (e) {
@@ -135,7 +152,7 @@
             </div>
 
         </div>
-
+        
 
         <div class="parking_status" id="parking_content">
         </div>
